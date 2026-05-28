@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LOGIC POP // BLU vs PINKY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-premium.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     LAYER 1 — TELA INICIAL (imagem de capa + botões)
+     Removida do DOM ao clicar em JOGAR
+     ═══════════════════════════════════════════════════ -->
+<div id="tela-inicio" style="
+  position:fixed; inset:0; width:100vw; height:100vh;
+  background-image:url('capa.jpg');
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+  z-index:8000; display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-end;
+  padding-bottom:12vh;
+">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+    <button onclick="telaInicioJogar()" style="
+      font-family:'Silkscreen',monospace; font-size:clamp(.9rem,1.6vw,1.2rem);
+      letter-spacing:.1em; color:#fff; cursor:pointer;
+      background:linear-gradient(180deg,#60b8ff,#2878e0);
+      border:4px solid rgba(255,255,255,.9); border-radius:18px;
+      padding:16px 56px; min-width:260px;
+      box-shadow:0 8px 0 #1050b0, 0 14px 28px rgba(16,80,176,.4),
+                 inset 0 2px 0 rgba(255,255,255,.5);
+      transition:transform .12s, box-shadow .12s;
+    " onmouseover="this.style.transform='translateY(-2px)'"
+       onmouseout="this.style.transform=''">🐻 JOGAR 🐻</button>
+
+    <button onclick="telaInicioRever()" style="
+      font-family:'Silkscreen',monospace; font-size:clamp(.6rem,1.1vw,.85rem);
+      letter-spacing:.08em; color:#fff; cursor:pointer;
+      background:linear-gradient(180deg,#c080ff,#8040d0);
+      border:4px solid rgba(255,255,255,.85); border-radius:16px;
+      padding:12px 32px; min-width:220px;
+      box-shadow:0 6px 0 #5020a0, inset 0 2px 0 rgba(255,255,255,.4);
+      transition:transform .12s;
+    " onmouseover="this.style.transform='translateY(-2px)'"
+       onmouseout="this.style.transform=''">📖 REVER HISTÓRIA</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     LAYER 2 — CUTSCENE (imagem tela cheia + texto + botões)
+     Criada dinamicamente por JS, removida do DOM ao fechar
+     ═══════════════════════════════════════════════════ -->
+<!-- #cutscene é injetado via JS quando necessário -->
+
+<!-- ═══════════════════════════════════════════════════
+     DECORAÇÕES (sempre visíveis, atrás do jogo)
+     ═══════════════════════════════════════════════════ -->
+<div class="deco-stars" aria-hidden="true">
+  <span class="deco s1">✦</span><span class="deco s2">✧</span>
+  <span class="deco s3">★</span><span class="deco s4">✦</span>
+  <span class="deco s5">✧</span><span class="deco s6">♡</span>
+  <span class="deco s7">✦</span><span class="deco s8">★</span>
+  <span class="deco s9">✧</span><span class="deco s10">♡</span>
+  <span class="deco s11">✦</span><span class="deco s12">★</span>
+</div>
+
+<div class="nuvens-bg" aria-hidden="true">
+  <div class="nuvem n1"></div><div class="nuvem n2"></div>
+  <div class="nuvem n3"></div><div class="nuvem n4"></div>
+  <div class="nuvem n5"></div><div class="nuvem n6"></div>
+  <div class="nuvem n7"></div><div class="nuvem n8"></div>
+  <div class="nuvem n9"></div><div class="nuvem n10"></div>
+  <div class="nuvem n11"></div><div class="nuvem n12"></div>
+  <div class="nuvem n13"></div><div class="nuvem n14"></div>
+  <div class="nuvem n15"></div><div class="nuvem n16"></div>
+  <div class="nuvem n17"></div><div class="nuvem n18"></div>
+  <div class="nuvem n19"></div><div class="nuvem n20"></div>
+  <div class="nuvem n21"></div><div class="nuvem n22"></div>
+  <div class="nuvem n23"></div><div class="nuvem n24"></div>
+  <div class="nuvem n25"></div><div class="nuvem n26"></div>
+  <div class="nuvem n27"></div>
+</div>
+
+<div class="doces-bg" aria-hidden="true">
+  <div class="pirulito p1"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p2"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p3"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p4"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p5"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p6"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p7"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p8"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p9"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p10"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p11"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p12"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p13"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p14"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p15"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito p16"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="bala b1"></div><div class="bala b2"></div>
+  <div class="bala b3"></div><div class="bala b4"></div>
+  <div class="bala b5"></div><div class="bala b6"></div>
+  <div class="bala b7"></div><div class="bala b8"></div>
+  <div class="bala b9"></div><div class="bala b10"></div>
+  <div class="bala b11"></div><div class="bala b12"></div>
+  <div class="bala b13"></div><div class="bala b14"></div>
+  <div class="bala b15"></div><div class="bala b16"></div>
+  <div class="donut d1"></div><div class="donut d2"></div>
+  <div class="donut d3"></div><div class="donut d4"></div>
+  <div class="donut d5"></div><div class="donut d6"></div>
+  <span class="candy-emoji ce1">🧁</span><span class="candy-emoji ce2">🍭</span>
+  <span class="candy-emoji ce3">🍬</span><span class="candy-emoji ce4">🍡</span>
+  <span class="candy-emoji ce5">🎂</span><span class="candy-emoji ce6">🍰</span>
+  <span class="candy-emoji ce7">🍭</span><span class="candy-emoji ce8">🧁</span>
+  <span class="candy-emoji ce9">🍬</span><span class="candy-emoji ce10">⭐</span>
+  <span class="candy-emoji ce11">💫</span><span class="candy-emoji ce12">🌟</span>
+  <span class="candy-emoji ce13">🍫</span><span class="candy-emoji ce14">🍩</span>
+  <span class="candy-emoji ce15">🍪</span><span class="candy-emoji ce16">🎀</span>
+  <span class="candy-emoji ce17">🍭</span><span class="candy-emoji ce18">✨</span>
+</div>
+
+<div class="doces-central" aria-hidden="true">
+  <div class="pirulito pc1"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc2"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc3"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc4"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc5"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc6"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc7"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc8"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc9"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc10"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc11"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc12"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc13"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc14"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc15"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc16"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc17"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="pirulito pc18"><div class="piru-bola"></div><div class="piru-cabo"></div></div>
+  <div class="bala bc1"></div><div class="bala bc2"></div>
+  <div class="bala bc3"></div><div class="bala bc4"></div>
+  <div class="bala bc5"></div><div class="bala bc6"></div>
+  <div class="bala bc7"></div><div class="bala bc8"></div>
+  <div class="bala bc9"></div><div class="bala bc10"></div>
+  <div class="bala bc11"></div><div class="bala bc12"></div>
+  <div class="donut dc1"></div><div class="donut dc2"></div>
+  <div class="donut dc3"></div><div class="donut dc4"></div>
+  <div class="donut dc5"></div><div class="donut dc6"></div>
+  <span class="cc1">🍭</span><span class="cc2">🧁</span>
+  <span class="cc3">🍬</span><span class="cc4">🍡</span>
+  <span class="cc5">🍰</span><span class="cc6">🍫</span>
+  <span class="cc7">🍩</span><span class="cc8">🍪</span>
+  <span class="cc9">⭐</span><span class="cc10">💫</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     LAYER 3 — JOGO (oculto até JOGAR ser clicado)
+     ═══════════════════════════════════════════════════ -->
+
+<!-- TELA DO JOGO -->
+<div id="tela-jogo" class="tela" style="display:none;">
+  <div class="scene-layer scene-sparkles" aria-hidden="true"></div>
+
+  <div id="barra-topo">
+    <div class="hud-esq">
+      <div class="hud-tag">LOGIC POP // BLU vs PINKY</div>
+      <div class="placar-bloco azul-borda" id="placar-j1">
+        <span class="avatar avatar-blue" aria-hidden="true">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+            <circle cx="22" cy="24" r="13" fill="#5ba8e8"/><circle cx="78" cy="24" r="13" fill="#5ba8e8"/>
+            <circle cx="22" cy="24" r="7" fill="#88c8f8"/><circle cx="78" cy="24" r="7" fill="#88c8f8"/>
+            <circle cx="50" cy="55" r="36" fill="#5ba8e8"/>
+            <circle cx="34" cy="57" r="7" fill="#ffb0c8" opacity=".7"/>
+            <circle cx="66" cy="57" r="7" fill="#ffb0c8" opacity=".7"/>
+            <ellipse cx="50" cy="64" rx="9" ry="6" fill="#88c8f8"/>
+            <ellipse cx="50" cy="66" rx="4.5" ry="2.5" fill="#3a2060"/>
+            <ellipse cx="50" cy="61" rx="3.5" ry="2" fill="#3a2060"/>
+            <circle cx="38" cy="48" r="6" fill="#fff"/><circle cx="62" cy="48" r="6" fill="#fff"/>
+            <circle cx="39" cy="48" r="3.5" fill="#1a1040"/><circle cx="63" cy="48" r="3.5" fill="#1a1040"/>
+            <circle cx="40" cy="47" r="1.2" fill="#fff"/><circle cx="64" cy="47" r="1.2" fill="#fff"/>
+          </svg>
+        </span>
+        <div class="placar-info">
+          <span class="placar-nome azul-texto">BLU</span>
+          <span class="placar-pts" id="pts-j1">0</span><span class="placar-label">PTS</span>
+        </div>
+      </div>
+    </div>
+    <div class="hud-centro">
+      <div id="cronometro"><span id="tempo-texto">1:00</span></div>
+      <div id="rodada-info">RODADA <span id="num-rodada">1</span>/<span id="total-rodadas">5</span></div>
+      <div class="hud-deco">♡ ★ ♡</div>
+    </div>
+    <div class="hud-dir">
+      <div class="hud-tag tech-night-tag">TECH NIGHT</div>
+      <div class="placar-bloco rosa-borda" id="placar-j2">
+        <span class="avatar avatar-pink" aria-hidden="true">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+            <circle cx="22" cy="24" r="13" fill="#f070b0"/><circle cx="78" cy="24" r="13" fill="#f070b0"/>
+            <circle cx="22" cy="24" r="7" fill="#ffb0d8"/><circle cx="78" cy="24" r="7" fill="#ffb0d8"/>
+            <circle cx="50" cy="55" r="36" fill="#f070b0"/>
+            <ellipse cx="38" cy="18" rx="10" ry="7" fill="#ff4090" transform="rotate(-20,38,18)"/>
+            <ellipse cx="62" cy="18" rx="10" ry="7" fill="#ff4090" transform="rotate(20,62,18)"/>
+            <circle cx="50" cy="18" r="5" fill="#ff60a8"/>
+            <circle cx="34" cy="57" r="7" fill="#ff90c0" opacity=".8"/>
+            <circle cx="66" cy="57" r="7" fill="#ff90c0" opacity=".8"/>
+            <ellipse cx="50" cy="64" rx="9" ry="6" fill="#ffb0d8"/>
+            <ellipse cx="50" cy="66" rx="4.5" ry="2.5" fill="#3a1040"/>
+            <ellipse cx="50" cy="61" rx="3.5" ry="2" fill="#b03070"/>
+            <circle cx="38" cy="48" r="6" fill="#fff"/><circle cx="62" cy="48" r="6" fill="#fff"/>
+            <circle cx="39" cy="48" r="3.5" fill="#1a1040"/><circle cx="63" cy="48" r="3.5" fill="#1a1040"/>
+            <circle cx="40" cy="47" r="1.2" fill="#fff"/><circle cx="64" cy="47" r="1.2" fill="#fff"/>
+          </svg>
+        </span>
+        <div class="placar-info">
+          <span class="placar-nome rosa-texto">PINKY</span>
+          <span class="placar-pts" id="pts-j2">0</span><span class="placar-label">PTS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="arena">
+    <div class="player-col" id="col-j1">
+      <div class="card-label azul-label">🐻 BLU 🐻</div>
+      <div class="carta-wrap azul-carta" id="carta-j1">
+        <div class="carta-deco-top">💙</div>
+        <div class="carta-interna" id="formulas-j1"></div>
+        <div class="carta-deco-bot">☁️</div>
+      </div>
+      <div class="keys-panel azul-borda">
+        <div class="keys-row">
+          <span class="key-pixel azul-key">W</span>
+          <span class="key-pixel azul-key">A</span>
+          <span class="key-pixel azul-key">S</span>
+          <span class="key-pixel azul-key">D</span>
+        </div>
+        <div class="keys-leg azul-texto">🐻 APERTE A TECLA NA POSIÇÃO DA RESPOSTA 🐻</div>
+      </div>
+    </div>
+
+    <div class="central-col" id="col-central">
+      <div class="card-label verde-label">★ DESAFIO ★</div>
+      <div class="carta-wrap verde-carta carta-central-wrap" id="carta-central">
+        <div class="carta-deco-top">💚</div>
+        <div class="carta-interna" id="formulas-central"></div>
+        <div class="carta-deco-bot">⭐</div>
+      </div>
+      <div class="encontre-painel" id="feedback-painel">
+        <span class="asa esq">🪽</span>
+        <span id="feedback-icone"></span>
+        <span id="feedback-msg" class="encontre-txt">ENCONTRE O EQUIVALENTE!</span>
+        <span id="feedback-exp" class="feedback-exp-txt"></span>
+        <span class="asa dir">🪽</span>
+      </div>
+    </div>
+
+    <div class="player-col" id="col-j2">
+      <div class="card-label rosa-label">🐻 PINKY 🐻</div>
+      <div class="carta-wrap rosa-carta" id="carta-j2">
+        <div class="carta-deco-top">🩷</div>
+        <div class="carta-interna" id="formulas-j2"></div>
+        <div class="carta-deco-bot">☁️</div>
+      </div>
+      <div class="keys-panel rosa-borda">
+        <div class="keys-row">
+          <span class="key-pixel rosa-key">↑</span>
+          <span class="key-pixel rosa-key">←</span>
+          <span class="key-pixel rosa-key">↓</span>
+          <span class="key-pixel rosa-key">→</span>
+        </div>
+        <div class="keys-leg rosa-texto">🐻 APERTE A TECLA NA POSIÇÃO DA RESPOSTA 🐻</div>
+      </div>
+    </div>
+  </div>
+
+  <button id="btn-guia" onclick="toggleGuia(); playCuteSound('click')">📖 GUIA LÓGICO ♡</button>
+</div>
+
+<!-- MODAL GUIA -->
+<div id="modal-guia" class="modal oculto">
+  <div class="modal-caixa">
+    <div class="modal-header">
+      <span class="verde-texto">★ GUIA DE LÓGICA PROPOSICIONAL ★</span>
+      <button class="btn-fechar" onclick="toggleGuia()">✕</button>
+    </div>
+    <div class="modal-corpo">
+      <h3 class="azul-texto">CONECTIVOS</h3>
+      <table class="tabela-logica">
+        <tr><td class="sim azul-texto">¬</td><td>NÃO (negação)</td><td class="ex">¬P</td></tr>
+        <tr><td class="sim azul-texto">∧</td><td>E (conjunção)</td><td class="ex">P ∧ Q</td></tr>
+        <tr><td class="sim azul-texto">∨</td><td>OU (disjunção)</td><td class="ex">P ∨ Q</td></tr>
+        <tr><td class="sim azul-texto">→</td><td>SE...ENTÃO</td><td class="ex">P → Q</td></tr>
+      </table>
+      <h3 class="rosa-texto">EQUIVALÊNCIAS ♡</h3>
+      <div class="equiv-lista">
+        <div class="equiv-item"><span class="eq-nome">Dupla Negação</span><span class="eq-f verde-texto">¬¬P ≡ P</span></div>
+        <div class="equiv-item"><span class="eq-nome">De Morgan ∧</span><span class="eq-f verde-texto">¬(P∧Q) ≡ ¬P∨¬Q</span></div>
+        <div class="equiv-item"><span class="eq-nome">De Morgan ∨</span><span class="eq-f verde-texto">¬(P∨Q) ≡ ¬P∧¬Q</span></div>
+        <div class="equiv-item"><span class="eq-nome">Implicação</span><span class="eq-f verde-texto">P→Q ≡ ¬P∨Q</span></div>
+        <div class="equiv-item"><span class="eq-nome">Comutatividade ∧</span><span class="eq-f verde-texto">P∧Q ≡ Q∧P</span></div>
+        <div class="equiv-item"><span class="eq-nome">Comutatividade ∨</span><span class="eq-f verde-texto">P∨Q ≡ Q∨P</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TELA FINAL -->
+<div id="tela-final" class="tela" style="display:none;">
+  <div class="final-wrap">
+    <div class="final-titulo">🏆 FIM DA PARTIDA! 🏆</div>
+    <div class="final-sub" id="final-vencedor"></div>
+    <div class="final-placar">
+      <div class="final-card azul-borda">
+        <div class="final-ursinho">
+          <svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:auto">
+            <circle cx="22" cy="22" r="14" fill="#5ba8e8"/><circle cx="78" cy="22" r="14" fill="#5ba8e8"/>
+            <circle cx="22" cy="22" r="8" fill="#88c8f8"/><circle cx="78" cy="22" r="8" fill="#88c8f8"/>
+            <ellipse cx="50" cy="78" rx="34" ry="28" fill="#5ba8e8"/>
+            <ellipse cx="50" cy="82" rx="20" ry="16" fill="#88c8f8"/>
+            <circle cx="50" cy="48" r="34" fill="#5ba8e8"/>
+            <circle cx="34" cy="55" r="8" fill="#ffb0c8" opacity=".7"/>
+            <circle cx="66" cy="55" r="8" fill="#ffb0c8" opacity=".7"/>
+            <ellipse cx="50" cy="58" rx="10" ry="7" fill="#88c8f8"/>
+            <ellipse cx="50" cy="60" rx="5" ry="3" fill="#3a2060"/>
+            <ellipse cx="50" cy="54" rx="4" ry="2.5" fill="#3a2060"/>
+            <circle cx="38" cy="44" r="6" fill="#fff"/><circle cx="62" cy="44" r="6" fill="#fff"/>
+            <circle cx="39" cy="44" r="3.5" fill="#1a1040"/><circle cx="63" cy="44" r="3.5" fill="#1a1040"/>
+            <circle cx="40" cy="43" r="1.2" fill="#fff"/><circle cx="64" cy="43" r="1.2" fill="#fff"/>
+          </svg>
+        </div>
+        <div class="final-jogador azul-texto">BLU</div>
+        <div class="final-pontos azul-texto" id="final-pts-j1">0</div>
+        <div class="final-categoria" id="final-cat-j1"></div>
+        <div class="final-stats">
+          <span>✓ ACERTOS: <strong id="final-ac-j1">0</strong></span>
+          <span>✗ ERROS: <strong id="final-err-j1">0</strong></span>
+        </div>
+      </div>
+      <div class="final-vs">VS ♡</div>
+      <div class="final-card rosa-borda">
+        <div class="final-ursinho">
+          <svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:auto">
+            <circle cx="22" cy="22" r="14" fill="#f070b0"/><circle cx="78" cy="22" r="14" fill="#f070b0"/>
+            <circle cx="22" cy="22" r="8" fill="#ffb0d8"/><circle cx="78" cy="22" r="8" fill="#ffb0d8"/>
+            <ellipse cx="50" cy="78" rx="34" ry="28" fill="#f070b0"/>
+            <ellipse cx="50" cy="82" rx="20" ry="16" fill="#ffb0d8"/>
+            <circle cx="50" cy="48" r="34" fill="#f070b0"/>
+            <ellipse cx="36" cy="16" rx="12" ry="8" fill="#ff4090" transform="rotate(-20,36,16)"/>
+            <ellipse cx="64" cy="16" rx="12" ry="8" fill="#ff4090" transform="rotate(20,64,16)"/>
+            <circle cx="50" cy="16" r="6" fill="#ff60a8"/>
+            <circle cx="34" cy="55" r="8" fill="#ff90c0" opacity=".8"/>
+            <circle cx="66" cy="55" r="8" fill="#ff90c0" opacity=".8"/>
+            <ellipse cx="50" cy="58" rx="10" ry="7" fill="#ffb0d8"/>
+            <ellipse cx="50" cy="60" rx="5" ry="3" fill="#3a1040"/>
+            <ellipse cx="50" cy="54" rx="4" ry="2.5" fill="#b03070"/>
+            <circle cx="38" cy="44" r="6" fill="#fff"/><circle cx="62" cy="44" r="6" fill="#fff"/>
+            <circle cx="39" cy="44" r="3.5" fill="#1a1040"/><circle cx="63" cy="44" r="3.5" fill="#1a1040"/>
+            <circle cx="40" cy="43" r="1.2" fill="#fff"/><circle cx="64" cy="43" r="1.2" fill="#fff"/>
+          </svg>
+        </div>
+        <div class="final-jogador rosa-texto">PINKY</div>
+        <div class="final-pontos rosa-texto" id="final-pts-j2">0</div>
+        <div class="final-categoria" id="final-cat-j2"></div>
+        <div class="final-stats">
+          <span>✓ ACERTOS: <strong id="final-ac-j2">0</strong></span>
+          <span>✗ ERROS: <strong id="final-err-j2">0</strong></span>
+        </div>
+      </div>
+    </div>
+    <div class="final-msg" id="final-msg-logica">A lógica venceu! ✨</div>
+    <button class="btn-pixel btn-iniciar" onclick="reiniciarJogo(); playCuteSound('click')">
+      🔄 JOGAR NOVAMENTE
+    </button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

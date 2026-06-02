@@ -163,9 +163,9 @@ A ursinha rosa inteligente e ágil.
 Que a lógica esteja ao seu favor no Reino dos Doces! ✨
 
 ## Integrantes do Grupo
-Guilherme Andrade
-Isabelly Ribeiro
-Karollyne Barbosa
-Lisa Sales
-Maria Clara
-Rhayssa Barbosa
+- Guilherme Andrade
+- Isabelly Ribeiro
+- Karollyne Barbosa
+- Lisa Sales
+- Maria Clara
+- Rhayssa Barbosa
